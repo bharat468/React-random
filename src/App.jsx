@@ -27,21 +27,33 @@ function App() {
     const randomindex = Math.floor(Math.random() * 6) + 1;
     var total = count + randomindex;
 
-      if (total > 100) {
-    alert("“आज इतना ही, बाकी कल।”");
-    total = 0;
-    setNumberarr([]);
-    setImage(questionmark);
-    setCount(0);
-    return;
-  }
-  
+    if (total > 100) {
+      alert("“आज इतना ही, बाकी कल।”");
+      total = 0;
+      setNumberarr([]);
+      setImage(questionmark);
+      setCount(0);
+      return;
+    }
+
     setImage(dices[randomindex]);
     setCount(total);
 
     setNumberarr(obj => [...obj, total])
 
   }
+
+function handleUndo() {
+    if (numberarr.length === 0) return;
+
+    const newNumberarr = [...numberarr];
+    newNumberarr.pop();
+    const lastNumber = newNumberarr.length > 0 ? newNumberarr[newNumberarr.length - 1] : 0;
+
+    setNumberarr(newNumberarr);
+    setCount(lastNumber);
+    setImage(lastNumber === 0 ? questionmark : dices[lastNumber % 6 === 0 ? 6 : lastNumber % 6]); 
+}
 
   return (
     <div>
@@ -57,6 +69,8 @@ function App() {
       </div>
       <div className='btnBox'>
         <button onClick={handleRandom}>click me</button>
+        <button onClick={handleUndo}>Undo</button>
+
       </div>
       <div className='image'>
         <img src={image} alt="" />
